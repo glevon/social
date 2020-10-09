@@ -1,6 +1,9 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import  AuthService from "../services/AuthService"
+import '../CSS/sign.css';
+import Signup from "./Signup";
+import { Link } from "react-router-dom";
+
 class Signin extends Component {
   constructor(props) {
     super(props);
@@ -17,18 +20,21 @@ class Signin extends Component {
     this.state.inp[e.target.getAttribute("data-id")] = e.target.value;
     this.setState({});
   }
-
+  sendWithEnter(e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      this.login()
+    }
+  }
 
   login(){
     AuthService.login(this.state.inp).then((r)=>{
-      console.log(r);
       if(!r.data.id){
         this.state.errors = {}
         r.data.forEach((item)=>{
           this.state.errors[item.param]=item.msg
         })
         this.setState({})
-        console.log(this.state.errors);
       }
       else{
         this.state.errors={};
@@ -44,42 +50,71 @@ class Signin extends Component {
       }
     })
   }
+  logTab(name,e) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(name).style.display = "block";
+    e.target.className += " active";
+  }
   render() {
     return (
       <div>
-        <div className="w-25 mx-auto text-center">
-        <h1 className="m-2 w-100"><Link className="w-50 btn btn-info" to="/signin">Sign in</Link>  <Link className="w-25 btn btn-secondary" to="/">Sign up</Link> </h1>
-          {this.props.location.state ? (
-            <h3 className=" alert alert-success">{this.props.location.state}</h3>
-          ) : null}
-          <input
-            type="text"
-            placeholder="Enter your email"
-            className="form-control m-2"
-            value={this.state.inp.email}
-            data-id="email"
-            onChange={this.change.bind(this)}
-          />
-            {this.state.errors.email ? (
-            <div className="alert alert-danger m-2 w-100">{this.state.errors.email}</div>
-          ) : null}
-          <input
-            type="password"
-            placeholder="Enter your password"
-            className="form-control m-2"
-            value={this.state.inp.password}
-            data-id="password"
-            onChange={this.change.bind(this)}
-          />
-
-          {this.state.errors.password ? (
-            <div className="alert alert-danger m-2 w-100">{this.state.errors.password}</div>
-          ) : null}
-
-          <button onClick={this.login.bind(this)} className="btn btn-info m-2">Sign in</button>
-          {/* <Link to="/">Don't registered yet? Register</Link> */}
+        <div className="header grid-container">
+          <div className="profile">
+            <h3><Link  to="/profile">CatChat </Link></h3>
+          </div>
         </div>
-      </div>
+        <div className="cont">
+          <div className="tab">
+            <button className="tablinks active" onClick={this.logTab.bind(this,"Sign In")}>  Sign In</button>
+            <button className="tablinks" onClick={this.logTab.bind(this, "Sign Up")}> Sign Up</button>
+          </div>
+
+          <div id="Sign In" className="tabcontent " style={{display:"block"}}>
+
+                {this.props.location.state ? (
+                  <div className="noth">{this.props.location.state}</div>
+                ) : null}
+                <input
+                  type="text"
+                  placeholder="Enter your email"
+                  className="inp"
+                  value={this.state.inp.email}
+                  data-id="email"
+                  onChange={this.change.bind(this)}
+                  onKeyDown={e=>this.sendWithEnter(e)}
+
+                />
+                  {this.state.errors.email ? (
+                  <div className="noth">{this.state.errors.email}</div>
+                ) : null}
+                <input
+                  type="password"
+                  placeholder="Enter your password"
+                  className="inp"
+                  value={this.state.inp.password}
+                  data-id="password"
+                  onChange={this.change.bind(this)}
+                  onKeyDown={e=>this.sendWithEnter(e)}
+
+                />
+              {this.state.errors.password ? (
+                <div className="noth">{this.state.errors.password}</div>
+              ) : null}
+              <button onClick={this.login.bind(this)} className="Button">Sign in</button>
+              </div>
+          <div id="Sign Up" className="tabcontent" >
+              <Signup></Signup>
+          </div>
+        </div>
+    </div>
     );
   }
 }

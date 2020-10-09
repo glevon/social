@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import UserService from "../services/UserService"
+import '../CSS/Profile.css';
 
 class ManageAccount extends Component {
   constructor(props) {
@@ -12,10 +13,9 @@ class ManageAccount extends Component {
         age:"",
       },
       errors:{},
-
-
     }
   }
+
   componentDidMount(){
     UserService.getUserData().then((r)=>{
       if (r.data.id) {
@@ -27,6 +27,7 @@ class ManageAccount extends Component {
       }
     })
   }
+
   change(e) {
     this.state.data[e.target.getAttribute("data-id")] = e.target.value;
     this.setState({});
@@ -53,13 +54,12 @@ class ManageAccount extends Component {
 
   render() {
     return (
-      <div className="w-25 mx-auto text-center">
-        <h1>Manage your Account</h1>
+      <div className="manage-account">
+        <h3 >Manage your Account</h3>
         <div>
         <input
             type="text"
             placeholder="Enter your name"
-            className="form-control m-2"
             value={this.state.data.name}
             data-id="name"
             onChange={this.change.bind(this)}
@@ -70,7 +70,6 @@ class ManageAccount extends Component {
           <input
             type="text"
             placeholder="Enter your surname"
-            className="form-control m-2"
             value={this.state.data.surname}
             data-id="surname"
             onChange={this.change.bind(this)}
@@ -82,7 +81,6 @@ class ManageAccount extends Component {
           <input
             type="text"
             placeholder="Enter your age"
-            className="form-control m-2"
             value={this.state.data.age}
             data-id="age"
             onChange={this.change.bind(this)}
@@ -91,7 +89,7 @@ class ManageAccount extends Component {
             <div className="alert alert-danger m-2 w-100">{this.state.errors.age}</div>
           ) : null}
         </div>
-        <button onClick={this.edit.bind(this)} className="btn btn-primary  ">Edit</button>
+        <button onClick={this.edit.bind(this)} className="Button">Edit</button>
       </div>
     )
   }

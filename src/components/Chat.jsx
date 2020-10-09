@@ -1,5 +1,4 @@
 import '../CSS/Chat.css';
-
 import React, { Component } from 'react'
 import ReactDOM  from "react-dom"
 
@@ -8,7 +7,8 @@ class Chat extends Component {
         super(props)
     
         this.state = {
-             mess:""
+             mess:"",
+             date:"",
         };
         this.messBox="";
     }
@@ -44,12 +44,13 @@ class Chat extends Component {
                     <div className="chat_header">
                         <div className="fr_data">
                             <h5>
-                                {this.props.data.name}{this.props.data.surname}
+                                {this.props.data.name }{this.props.data.surname}
                             </h5>
                         </div>
-                        <button className="btn btn-warning" onClick={this.props.close.bind(this)}>
-                        <i className="fa fa-window-close-o" aria-hidden="true"></i>
-                        </button>
+                        <div>
+                            <i class="fa fa-close btn" style={{color:"white"}} onClick={this.props.close.bind(this)} aria-hidden="true"></i>
+
+                        </div>
                     </div>
                     <div className="chat_body" ref={el=>{
                         this.messBox=el;
@@ -57,17 +58,19 @@ class Chat extends Component {
                     {
                     this.props.mess.map(a => (
                         <div key={a.id} className={a.me ? "myMessage" : "yourMessage"}>
-                            <h5>{a.message}</h5>
-                            <p>
-                                <i>{a.time}</i>
-                            </p>
+                            <h6>{a.message}</h6>
+                            <h6 className="time">
+                                <i >{(new Date(a.time)).getDate()}-{((new Date(a.time)).getMonth()+1)}-
+                                { (new Date(a.time)).getFullYear()} {(new Date(a.time)).getHours() }: 
+                                {(new Date(a.time)).getMinutes()}</i>
+                            </h6>
                         </div>
                     ))
                     }
                     </div>
                     <div className="chat_footer">
-                        <textarea onKeyDown={this.sendWithEnter.bind(this)} className="form-control" placeholder="type  messige..." value={this.state.mess} onChange={this.change.bind(this)}></textarea>
-                        <button onClick={this.send.bind(this)} className="btn btn-info">
+                        <input onKeyDown={this.sendWithEnter.bind(this)} className="chat-inp" placeholder="type  message..." value={this.state.mess} onChange={this.change.bind(this)}/>
+                        <button onClick={this.send.bind(this)} className="chat-button">
                         <i className="fa fa-paper-plane" aria-hidden="true"></i>
                         </button>
                     </div>
